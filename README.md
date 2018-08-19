@@ -1,5 +1,14 @@
-This project run under classical lampp stack installation.
-alternatively use apache + php>7
+This project runs under a classical lampp/xampp stack installation.
+
+Alternatively use Apachev2+ with PHP v7+ and ModRewrite module installed and enabled:
+
+edit vhost file in order to enable the override rule
+
+DocumentRoot "/opt/lampp/htdocs"
+<Directory "/opt/lampp/htdocs">
+AllowOverride All
+Require all granted
+</Directory>
 
 extract the repository content directly under server document root 
 
