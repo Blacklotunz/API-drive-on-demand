@@ -1,0 +1,4 @@
+#into vhost configuration set: AllowOverride All
+RewriteEngine On    # Turn on the rewriting engine
+
+RewriteRule ^conceptAPI/(.*)$ index.php?$1 [NC,L]
