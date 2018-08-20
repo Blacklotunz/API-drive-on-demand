@@ -20,9 +20,23 @@ then access to the management API using the base URL
 You may find a more detailed API documentation here:
 https://documenter.getpostman.com/view/2040373/RWToRJWU#18407ae8-d041-d1ee-d3d1-c30295b16df3
 
-In order to execute the test suite:
-move into conceptReply_testSuite
-then execute 
+In order to execute the test suite phpunit is required.
+
+To install it you need composer. (I didn't committed it on purpose) 
+
+Since it's opensurce and easy to download, you may found a quick installation guide here: 
+```
+https://getcomposer.org/doc/00-intro.md
+```
+
+Then, once you have composer, open a shell, move into conceptReply_testSuite folder and type:
+
+```
+composer update
+```
+
+after phpunit and its dependecies are downloaded execute 
+
 ```
 ./vendor/bin/phpunit
 ```
