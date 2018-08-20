@@ -19,3 +19,10 @@ then access to the management API using the base URL
 
 You may find a more detailed API documentation here:
 https://documenter.getpostman.com/view/2040373/RWToRJWU#18407ae8-d041-d1ee-d3d1-c30295b16df3
+
+In order to execute the test suite:
+move into conceptReply_testSuite
+then execute 
+```
+./vendor/bin/phpunit
+```

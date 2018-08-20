@@ -9,6 +9,7 @@ $request = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
 ///////INPUT BLOCK//////
 //try to read Json
 $input = json_decode(file_get_contents('php://input'), true);
+
 if(!$input){
   //fall back -> get parameter passed into request as querystring
   parse_str(file_get_contents('php://input'), $input);

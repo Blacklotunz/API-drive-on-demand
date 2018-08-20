@@ -23,11 +23,14 @@ class User implements Dao_interface{
   public function add($database, $input){
     try{
       //data error checking
-      if(empty($input['name']) || empty($input['password']) || empty($input['mail']) ){
+      if(empty($input['name']) || empty($input['password']) || empty($input['mail']) ||
+          (!empty($input['age']) && !is_integer($input['age'])) ||
+          empty($input['actual_location']) ||
+          (empty($input['actual_location']) && !is_numeric($input['actual_location']))){
         http_response_code(422);
         return json_encode(array(
           'code' => 422,
-          'message' => 'Missing mandatory data'
+          'message' => 'Missing mandatory data or wrong data type'
         ));
       }
       //////////
@@ -100,6 +103,12 @@ class User implements Dao_interface{
           }
           $res = $database->update('users', $input['userID'], $toUpdate);
           $toRet['result'] = $res;
+        }else{
+          http_response_code(404);
+          $toRet = json_encode(array(
+            'code' => 404,
+            'message' => 'userID not found'
+          ));
         }
       }else{
         http_response_code(404);
