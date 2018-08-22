@@ -16,7 +16,7 @@ class Car implements Dao_interface{
       //"$id not found / not defined on table $table"
     }
 
-    return json_encode($toRet);
+    return json_encode($toRet, JSON_FORCE_OBJECT);
   }
 
   public function add($database, $input){
@@ -30,7 +30,7 @@ class Car implements Dao_interface{
         return json_encode(array(
           'code' => 422,
           'message' => 'Missing mandatory data'
-        ));
+        ), JSON_FORCE_OBJECT);
       }
       //if passed data are ok then add new car
       $toAdd = array(
@@ -50,7 +50,7 @@ class Car implements Dao_interface{
       http_response_code(500);
       $toRet = $e->getMessage();
     }
-    return json_encode($toRet);
+    return json_encode($toRet, JSON_FORCE_OBJECT);
   }
 
 
@@ -86,7 +86,7 @@ class Car implements Dao_interface{
       http_response_code(500);
       $toRet = $e->getMessage();
     }
-    return json_encode($toRet);
+    return json_encode($toRet, JSON_FORCE_OBJECT);
   }
 
 
@@ -111,20 +111,20 @@ class Car implements Dao_interface{
           return json_encode(array(
             'code' => 404,
             'message' => 'carID not found'
-          ));
+          ), JSON_FORCE_OBJECT);
         }
       }else{
         http_response_code(422);
         $toRet = json_encode(array(
           'code' => 422,
           'message' => 'Missing carID'
-        ));
+        ), JSON_FORCE_OBJECT);
       }
     }catch(Error $e){
       http_response_code(500);
       $toRet = $e->getMessage();
     }
-    return json_encode($toRet);
+    return json_encode($toRet, JSON_FORCE_OBJECT);
   }
 
 }

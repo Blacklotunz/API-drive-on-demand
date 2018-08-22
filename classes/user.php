@@ -17,7 +17,7 @@ class User implements Dao_interface{
       }
     }
 
-    return json_encode($toRet);
+    return json_encode($toRet, JSON_FORCE_OBJECT);
   }
 
   public function add($database, $input){
@@ -31,7 +31,7 @@ class User implements Dao_interface{
         return json_encode(array(
           'code' => 422,
           'message' => 'Missing mandatory data or wrong data type'
-        ));
+        ), JSON_FORCE_OBJECT);
       }
       //////////
       //if everithing fine, then add
@@ -49,7 +49,7 @@ class User implements Dao_interface{
       http_response_code(500);
       $toRet = $e->getMessage();
     }
-    return json_encode($toRet);
+    return json_encode($toRet, JSON_FORCE_OBJECT);
   }
 
 
@@ -65,7 +65,7 @@ class User implements Dao_interface{
             $toRet = json_encode(array(
               'code' => 500,
               'message' => 'Cannot remove this userID'
-            ));
+            ), JSON_FORCE_OBJECT);
             return $toRet;
             //$database->delete('demands', $demand_id);
           }
@@ -77,13 +77,13 @@ class User implements Dao_interface{
         $toRet = json_encode(array(
           'code' => 422,
           'message' => 'Missing userID'
-        ));
+        ), JSON_FORCE_OBJECT);
       }
     }catch(Error $e){
       http_response_code(500);
       $toRet = $e->getMessage();
     }
-    return json_encode($toRet);
+    return json_encode($toRet, JSON_FORCE_OBJECT);
   }
 
 
@@ -108,20 +108,20 @@ class User implements Dao_interface{
           $toRet = json_encode(array(
             'code' => 404,
             'message' => 'userID not found'
-          ));
+          ), JSON_FORCE_OBJECT);
         }
       }else{
         http_response_code(404);
         $toRet = json_encode(array(
           'code' => 404,
           'message' => 'userID not found'
-        ));
+        ), JSON_FORCE_OBJECT);
       }
     }catch(Error $e){
       http_response_code(500);
       $toRet = $e->getMessage();
     }
-    return json_encode($toRet);
+    return json_encode($toRet, JSON_FORCE_OBJECT);
   }
 
 }

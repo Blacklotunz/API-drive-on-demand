@@ -10,22 +10,22 @@ class UserTestCase extends TestCase
     $this->http = new GuzzleHttp\Client(['base_uri' => 'http://localhost/conceptAPI/']);
   }
 
-  public function testCarGet()
+  public function testUserGet()
   {
-    $response = $this->http->request('GET', 'car');
+    $response = $this->http->request('GET', 'user');
     $this->assertEquals(200, $response->getStatusCode());
     $contentType = $response->getHeaders()["Content-Type"][0];
     $this->assertEquals("application/json", $contentType);
 
     $resultExpected = false;
-    //equivalence class 1 of CarCreation use case: creation with not all required attributes
+    //equivalence class 1 of UserCreation use case: creation with not all required attributes
     try{
-      $response = $this->http->post('car', [
+      $response = $this->http->post('user', [
         'headers' => [
           'Content-Type' => 'application/json',
         ],
         "body" =>json_encode([
-          "model" => "BMW"
+          "name" => "test_user"
         ])
       ]);
     }catch(GuzzleHttp\Exception\ClientException $exception){
@@ -35,36 +35,65 @@ class UserTestCase extends TestCase
     $this->assertTrue($resultExpected);
     $resultExpected = false;
 
-    //equivalence class 2 of CarCreation use case: creation with all required attributes and good type fields
-    $response = $this->http->post('car', array(
+    //equivalence class 2 of UserCreation use case: creation with all required attributes and wrong type field
+    try{
+      $response = $this->http->post('user', [
+        'headers' => [
+          'Content-Type' => 'application/json',
+        ],
+        "body" =>json_encode([
+          "name" => "test_user",
+          "password" => "test_pwd",
+          "mail" => "mail@test.com",
+          "actual_location" => "20",
+          "phone_number" => "222111222333",
+          "age" => "bad_number"
+        ])
+      ]);
+    }catch(GuzzleHttp\Exception\ClientException $exception){
+      $resultExpected = true;
+      $this->assertEquals(422, $exception->getResponse()->getStatusCode());
+    }
+
+    $this->assertTrue($resultExpected);
+    $resultExpected = false;
+
+
+    //equivalence class 3 of UserCreation use case: creation with all required attributes and good type fields
+    $response = $this->http->post('user', array(
       'headers' => [
         'Content-Type' => 'application/json',
         ],
         "body" =>json_encode([
-          "model" => "Spider",
-          "engine": "2.4",
-          "current_location": 0,
-          "number_of_seats": "2",
-          "number_of_doors": "3",
-          "fuel_type": "Gasoline",
-          "plate_number": "111555222",
-          "infotainment_system": "none",
-          "interior_design" : "sport"
+          "name" => "test_user",
+          "password" => "test_pwd",
+          "mail" => "mail@test.com",
+          "actual_location" => "20",
+          "phone_number" => "222111222333",
+          "age" => 28
           ])
         ));
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertNotEmpty($response->getBody());
 
-        //CarUpdate use case -> equivalence class 1 CarID not present
+        /*
+        and so on for other equivalence classes (e.g. actual_location may be NaN)
+        */
+
+        //UserUpdate use case -> equivalence class 1 UserID not present
         try{
-          $response = $this->http->put('car', array(
+          $response = $this->http->put('user', array(
             'headers' => [
               'Content-Type' => 'application/json',
               ],
               "body" =>json_encode([
-                "carID" => "-1",
-                "current_location" : 6
+                "name" => "test_user",
+                "password" => "test_pwd",
+                "mail" => "mail@test.com",
+                "actual_location" => "20",
+                "phone_number" => "222111222333",
+                "age" => 28
                 ])
               ));
         }catch(GuzzleHttp\Exception\ClientException $exception){
@@ -74,23 +103,47 @@ class UserTestCase extends TestCase
         $this->assertTrue($resultExpected);
         $resultExpected = false;
 
-        //CarUpdate use case: equivalence class 3 CarID present
-        $response = $this->http->put('car', array(
-          'headers' => [
-            'Content-Type' => 'application/json',
-            ],
-            "body" =>json_encode([
-              "carID" => "0",
-              "current_location" => 82
-              ])
-            ));
 
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertNotEmpty($response->getBody());
+            //UserUpdate use case: equivalence class 2 UserID not present or wrong type
+            try{
+              $response = $this->http->put('user', array(
+                'headers' => [
+                  'Content-Type' => 'application/json',
+                  ],
+                  "body" =>json_encode([
+                    "userID" => "not_a_valid_user",
+                    "name" => "test_user",
+                    "password" => "test_pwd",
+                    "mail" => "mail@test.com",
+                    "actual_location" => "20",
+                    "phone_number" => "222111222333",
+                    "age" => 28
+                    ])
+                  ));
+            }catch(GuzzleHttp\Exception\ClientException $exception){
+              $resultExpected = true;
+              $this->assertEquals(404, $exception->getResponse()->getStatusCode());
+            }
+            $this->assertTrue($resultExpected);
+            $resultExpected = false;
 
-        //assert change
-        $response = $this->http->get('car/1');
-        $this->assertEquals(json_decode($response->getBody(), true)['model'], 'BMW');
+            //UserUpdate use case: equivalence class 3 UserID present
+            $response = $this->http->put('user', array(
+              'headers' => [
+                'Content-Type' => 'application/json',
+                ],
+                "body" =>json_encode([
+                  "userID" => "0",
+                  "phone_number" => "0000000"
+                  ])
+                ));
+
+            $this->assertEquals(200, $response->getStatusCode());
+            $this->assertEquals(1,json_decode($response->getBody()->getContents(), true)['field_changed']);
+
+            //assert change
+            $response = $this->http->get('user/0');
+            $this->assertEquals(json_decode($response->getBody(), true)['phone_number'], '0000000');
 
       }
 
