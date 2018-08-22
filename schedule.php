@@ -123,5 +123,5 @@ if($debug){
 }
 
 $toRet = array('schedule'   => $schedule,
-               'unscheduled'=> $unscheduled);
+               'unscheduled'=> @$unscheduled);
 echo(json_encode($toRet));

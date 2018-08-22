@@ -18,7 +18,7 @@ class Demand implements Dao_interface{
        }
      }
 
-     return json_encode($toRet);
+     return json_encode($toRet, JSON_FORCE_OBJECT);
    }
 
    public function add($database, $input){
@@ -30,7 +30,7 @@ class Demand implements Dao_interface{
           return json_encode(array(
             'code' => 422,
             'message' => 'Missing mandatory data'
-          ));
+          ), JSON_FORCE_OBJECT);
        }else{
          //toDO: check if passed userID exist into db
          if( null == $database->get('users', $input['userID'])){
@@ -38,7 +38,7 @@ class Demand implements Dao_interface{
            return json_encode(array(
              'code' => 422,
              'message' => 'Key constraints violated'
-           ));
+           ), JSON_FORCE_OBJECT);
          }
        }
        //////////
@@ -57,7 +57,7 @@ class Demand implements Dao_interface{
        http_response_code(500);
        $toRet = $e->getMessage();
      }
-     return json_encode($toRet);
+     return json_encode($toRet, JSON_FORCE_OBJECT);
    }
 
 
@@ -73,7 +73,7 @@ class Demand implements Dao_interface{
        http_response_code(500);
        $toRet = $e->getMessage();
      }
-     return json_encode($toRet);
+     return json_encode($toRet, JSON_FORCE_OBJECT);
    }
 
 
@@ -101,7 +101,7 @@ class Demand implements Dao_interface{
        http_response_code(500);
        $toRet = $e->getMessage();
      }
-     return json_encode($toRet);
+     return json_encode($toRet, JSON_FORCE_OBJECT);
    }
 
 }
